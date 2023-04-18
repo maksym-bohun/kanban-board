@@ -12,6 +12,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   // const [url, setUrl] = useState("");
+  const [allIssues, setAllIssues] = useState<Issue[]>([]);
   const [boards, setBoards] = useState<Board[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const [currentBoard, setCurrentBoard] = useState<Board>();
@@ -51,6 +52,7 @@ function App() {
         .then((res) => {
           console.log("res", res);
           setIssues(res);
+
           // setTimeout(() => setUrl(url), 500);
           setError(false);
         })
@@ -66,6 +68,9 @@ function App() {
     if (isMounted && issues.length > 0) {
       boards[0].items = issues;
       setBoards((prevBoards) => [...prevBoards]);
+      issues.forEach((issue) =>
+        setAllIssues((currentIssues) => [...currentIssues, issue])
+      );
     } else {
       setIsMounted(true);
       resetBoards(setBoards);
@@ -158,6 +163,8 @@ function App() {
     e.preventDefault();
   };
 
+  console.log("ISSUES LENGTH", issues.length);
+
   return (
     <div className="App">
       <InputField submitHandler={submitHandler} error={error} />
@@ -177,7 +184,9 @@ function App() {
             >
               <h3 className="board__title">{board.title}</h3>
               <div className="list">
-                {issues.length === 0 && <p>No issues in this repo</p>}
+                {allIssues.length === 0 && !loading && (
+                  <p>No issues in this repo</p>
+                )}
                 {loading && (
                   <div className="spinner">
                     <Spinner />
