@@ -5,41 +5,85 @@ import fetchData from "./helpers/helpers";
 import Item from "./components/Item";
 import Spinner from "./UI/Spinner";
 import { resetBoards } from "./helpers/helpers";
+import InputField from "./components/InputField";
 
 function App() {
-  const [url, setUrl] = useState("");
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [url, setUrl] = useState("");
   const [boards, setBoards] = useState<Board[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const [currentBoard, setCurrentBoard] = useState<Board>();
   const [currentIssue, setCurrentIssue] = useState<Issue>();
+  const [hideIssues, setHideIssues] = useState(false);
 
-  const submitHandler = async (e: any) => {
-    e.preventDefault();
+  useEffect(() => {
     resetBoards(setBoards);
+  }, []);
+
+  useEffect(() => {
+    console.log("2");
     if (url.trim().length > 0) {
-      setLoading(true);
-      try {
-        await fetchData(url, setIssues);
-        setError(false);
-      } catch (err) {
-        console.log(err);
-        setError(true);
-      } finally {
-        setLoading(false);
+      console.log("URL", url);
+      localStorage.setItem(url, JSON.stringify(boards));
+      console.log("BBOOAARRDDSS", boards);
+    }
+  }, [url, boards]);
+
+  useEffect(() => {
+    console.log("3");
+    console.log("URL1", url);
+    const localStorageValue = localStorage.getItem(url);
+    if (localStorageValue) {
+      if (JSON.parse(localStorageValue).length > 0) {
+        console.log(JSON.parse(localStorageValue));
+        setBoards(JSON.parse(localStorageValue));
       }
+    }
+  }, [url]);
+
+  const submitHandler = async (url: string) => {
+    console.log("1. ISSUES", issues);
+    if (url.trim().length > 0) {
+      setIssues([]);
+      setLoading(true);
+      console.log("ISSUES BEFORE", issues);
+
+      setHideIssues(true);
+      fetchData(url)
+        .then((res) => {
+          console.log("res", res);
+          setIssues(res);
+          setTimeout(() => setUrl(url), 500);
+          setError(false);
+        })
+        .catch(() => setError(true))
+        .finally(() => {
+          setLoading(false);
+          setHideIssues(false);
+        });
+      // .then((res) => {
+      //   console.log("THEN");
+      //   setError(false);
+      //
+      //   console.log("ISSUES INSIDE THEN", issues);
+      //   setIssues(res);
+      // })
+      //
+      //
     }
   };
 
   useEffect(() => {
-    if (isMounted) {
+    console.log("4");
+    if (isMounted && issues.length > 0) {
+      console.log("4.1");
       boards[0].items = issues;
       setBoards((prevBoards) => [...prevBoards]);
     } else {
+      console.log("4.2");
       setIsMounted(true);
-      resetBoards(setBoards);
     }
   }, [issues]);
 
@@ -62,7 +106,6 @@ function App() {
     board: Board,
     item: Issue
   ) => {
-    // e.dataTransfer.setData("text/plain", item.id.toString());
     setCurrentBoard(board);
     setCurrentIssue(item);
   };
@@ -107,8 +150,6 @@ function App() {
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e.target);
-    console.log("CURRENT BOARD", currentBoard);
     if (currentBoard && currentIssue) {
       const currentIndex = currentBoard?.items.indexOf(currentIssue);
       currentBoard?.items.splice(currentIndex, 1);
@@ -127,25 +168,20 @@ function App() {
       );
     }
   };
+
   const dragOverContainerHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
   return (
     <div className="App">
-      <form className="input-field" onSubmit={submitHandler}>
-        <input
-          type="text"
-          onChange={(e) => setUrl(e.target.value)}
-          value={url}
-        />
-        <button className="button">Submit</button>
-      </form>
+      <InputField submitHandler={submitHandler} error={error} />
 
       <div className="boards-container">
         {boards.map((board) => {
           return (
             <div
+              key={board.title}
               className="board"
               onDragOver={(e: React.DragEvent<HTMLDivElement>) =>
                 dragOverContainerHandler(e)
@@ -156,24 +192,27 @@ function App() {
             >
               <h3 className="board__title">{board.title}</h3>
               <div className="list">
+                {issues.length === 0 && <p>No issues in this repo</p>}
                 {loading && (
                   <div className="spinner">
                     <Spinner />
                     <p>Please wait...</p>
                   </div>
                 )}
-                {error && <h2 className="error">Incorrect url!</h2>}
-                {board.items.map((item) => (
-                  <Item
-                    item={item}
-                    board={board}
-                    dragOverHandler={dragOverHandler}
-                    dragLeaveHandler={dragLeaveHandler}
-                    dragStartHandler={dragStartHandler}
-                    dragEndHandler={dragEndHandler}
-                    dropHandler={dropHandler}
-                  />
-                ))}
+                {error && !loading && <h2 className="error">Incorrect url!</h2>}
+                {!hideIssues &&
+                  board.items.map((item) => (
+                    <Item
+                      key={item.number}
+                      item={item}
+                      board={board}
+                      dragOverHandler={dragOverHandler}
+                      dragLeaveHandler={dragLeaveHandler}
+                      dragStartHandler={dragStartHandler}
+                      dragEndHandler={dragEndHandler}
+                      dropHandler={dropHandler}
+                    />
+                  ))}
               </div>
             </div>
           );

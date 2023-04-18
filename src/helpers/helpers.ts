@@ -1,22 +1,19 @@
 //   const url = `https://api.github.com/repos/${inputUrl.slice(19)}/issues`;
-const fetchData = async (
-  inputUrl: string,
-  setIssues: Function,
-  setClearIssues: Function
-) => {
-  // setClearIssues(true);
+const fetchData = async (inputUrl: string) => {
+  // setIssues([]);
   const allData = [];
   let counter = 1;
   let data = [];
+  console.log("1.1");
 
   do {
+    console.log("1.2");
     const url = `https://api.github.com/repos/${inputUrl.slice(
       19
     )}/issues?state=open&per_page=100&page=${counter}`;
     const res = await fetch(url);
     if (!res.ok) {
       throw new Error("No issues!");
-      break;
     }
     data = await res.json();
     allData.push(...data);
@@ -24,20 +21,9 @@ const fetchData = async (
   } while (data.length === 100);
 
   console.log("ALL DATA", allData);
-  allData.forEach((item: any) => {
-    setIssues((currentIssue: any) => [
-      ...currentIssue,
-      {
-        id: item.number,
-        number: item.number,
-        title: item.title,
-        openedDate: item["created_at"],
-        comments: item.comments,
-        author: item.user.login || "user",
-      },
-    ]);
-  });
-  await setClearIssues(false);
+  console.log("1.3");
+
+  return allData;
 };
 
 export default fetchData;
