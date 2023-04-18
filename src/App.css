@@ -1,0 +1,138 @@
+.App {
+  background-color: #fff;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-field {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  width: 90vw;
+}
+
+.input-field input {
+  width: 90%;
+  padding: 0.5rem 1rem;
+}
+
+.boards-container {
+  display: flex;
+  gap: 1rem;
+  height: 80vh;
+  margin-top: 2rem;
+}
+
+.board {
+  width: 30vw;
+  background-color: #777;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: scroll;
+  padding: 1rem 0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  position: relative;
+}
+
+.board__title {
+  font-size: 2rem;
+  height: 2rem;
+  margin-top: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 90%;
+}
+
+.item {
+  background-color: #fff;
+  padding: 0.8rem;
+  border-radius: 5px;
+  overflow-y: hidden;
+  width: 100%;
+  cursor: grab;
+}
+
+.item h5 {
+  margin: 0;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.button {
+  background-color: #777;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #636262;
+}
+
+.error {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.6);
+}
+
+.actions-container {
+  display: flex;
+  flex-direction: column;
+}
+.star-icon {
+  height: 1.6rem;
+  width: 1.6rem;
+}
+
+.path-container {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  padding: 1rem 0 0 0;
+}
+
+.path-container span {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.repo-path {
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.repo-path:visited,
+.repo-path:link {
+  color: blue;
+}
+
+.repo-path:hover,
+.repo-path:active {
+  color: rgb(18, 18, 171);
+}
