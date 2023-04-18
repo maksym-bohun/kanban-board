@@ -18,10 +18,6 @@ function App() {
   const [currentIssue, setCurrentIssue] = useState<Issue>();
   const [hideIssues, setHideIssues] = useState(false);
 
-  useEffect(() => {
-    resetBoards(setBoards);
-  }, []);
-
   // useEffect(() => {
   //   console.log("2");
   //   if (url.trim().length > 0) {
@@ -67,14 +63,12 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("4");
     if (isMounted && issues.length > 0) {
-      console.log("4.1");
       boards[0].items = issues;
       setBoards((prevBoards) => [...prevBoards]);
     } else {
-      console.log("4.2");
       setIsMounted(true);
+      resetBoards(setBoards);
     }
   }, [issues]);
 

@@ -28,7 +28,8 @@ const Item: React.FC<ItemProps> = ({
   dragEndHandler,
   dropHandler,
 }) => {
-  const date = daysAgo(item.openedDate);
+  console.log("item", item);
+  const date = daysAgo(item["created_at"]);
 
   return (
     <div

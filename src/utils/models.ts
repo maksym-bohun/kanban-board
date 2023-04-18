@@ -2,7 +2,7 @@ export interface Issue {
   id: number;
   title: string;
   number: number;
-  openedDate: string;
+  created_at: string;
   comments: number;
   author: string;
 }
