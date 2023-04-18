@@ -11,7 +11,7 @@ function App() {
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [url, setUrl] = useState("");
+  // const [url, setUrl] = useState("");
   const [boards, setBoards] = useState<Board[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const [currentBoard, setCurrentBoard] = useState<Board>();
@@ -22,26 +22,26 @@ function App() {
     resetBoards(setBoards);
   }, []);
 
-  useEffect(() => {
-    console.log("2");
-    if (url.trim().length > 0) {
-      console.log("URL", url);
-      localStorage.setItem(url, JSON.stringify(boards));
-      console.log("BBOOAARRDDSS", boards);
-    }
-  }, [url, boards]);
+  // useEffect(() => {
+  //   console.log("2");
+  //   if (url.trim().length > 0) {
+  //     console.log("URL", url);
+  //     localStorage.setItem(url, JSON.stringify(boards));
+  //     console.log("BBOOAARRDDSS", boards);
+  //   }
+  // }, [url, boards]);
 
-  useEffect(() => {
-    console.log("3");
-    console.log("URL1", url);
-    const localStorageValue = localStorage.getItem(url);
-    if (localStorageValue) {
-      if (JSON.parse(localStorageValue).length > 0) {
-        console.log(JSON.parse(localStorageValue));
-        setBoards(JSON.parse(localStorageValue));
-      }
-    }
-  }, [url]);
+  // useEffect(() => {
+  //   console.log("3");
+  //   console.log("URL1", url);
+  //   const localStorageValue = localStorage.getItem(url);
+  //   if (localStorageValue) {
+  //     if (JSON.parse(localStorageValue).length > 0) {
+  //       console.log(JSON.parse(localStorageValue));
+  //       setBoards(JSON.parse(localStorageValue));
+  //     }
+  //   }
+  // }, [url]);
 
   const submitHandler = async (url: string) => {
     console.log("1. ISSUES", issues);
@@ -55,7 +55,7 @@ function App() {
         .then((res) => {
           console.log("res", res);
           setIssues(res);
-          setTimeout(() => setUrl(url), 500);
+          // setTimeout(() => setUrl(url), 500);
           setError(false);
         })
         .catch(() => setError(true))
@@ -63,15 +63,6 @@ function App() {
           setLoading(false);
           setHideIssues(false);
         });
-      // .then((res) => {
-      //   console.log("THEN");
-      //   setError(false);
-      //
-      //   console.log("ISSUES INSIDE THEN", issues);
-      //   setIssues(res);
-      // })
-      //
-      //
     }
   };
 

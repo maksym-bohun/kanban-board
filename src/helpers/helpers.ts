@@ -1,6 +1,4 @@
-//   const url = `https://api.github.com/repos/${inputUrl.slice(19)}/issues`;
 const fetchData = async (inputUrl: string) => {
-  // setIssues([]);
   const allData = [];
   let counter = 1;
   let data = [];
