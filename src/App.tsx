@@ -18,16 +18,13 @@ function App() {
   const [hideIssues, setHideIssues] = useState(false);
 
   const submitHandler = async (url: string) => {
-    console.log("1. ISSUES", issues);
     if (url.trim().length > 0) {
       setIssues([]);
       setLoading(true);
-      console.log("ISSUES BEFORE", issues);
 
       setHideIssues(true);
       fetchData(url)
         .then((res) => {
-          console.log("res", res);
           setIssues(res);
 
           setError(false);
