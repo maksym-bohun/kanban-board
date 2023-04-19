@@ -20,10 +20,12 @@ const InputField: React.FC<InputFieldProps> = ({ submitHandler, error }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    submitHandler(inputValue);
-    await createPath();
-    setShowPath(true);
-    setInputValue("");
+    if (inputValue.trim().length > 0) {
+      submitHandler(inputValue);
+      await createPath();
+      setShowPath(true);
+      setInputValue("");
+    }
   };
 
   useEffect(() => {
@@ -47,8 +49,13 @@ const InputField: React.FC<InputFieldProps> = ({ submitHandler, error }) => {
   return (
     <div className="actions-container">
       <form className="input-field" onSubmit={handleSubmit}>
-        <input type="text" onChange={handleChange} value={inputValue} />
-        <button className="button">Submit</button>
+        <input
+          type="text"
+          onChange={handleChange}
+          value={inputValue}
+          placeholder="Enter repo url"
+        />
+        <button className="button">Load Issues</button>
       </form>
       {showPath && currentUrl && stars && (
         <div className="path-container">
